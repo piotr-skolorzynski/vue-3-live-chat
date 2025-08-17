@@ -11,6 +11,10 @@
 
     <input type="password" required placeholder="password" v-model="password" />
 
+    <div v-if="error" class="error">
+      {{ error }}
+    </div>
+
     <button>Sign up</button>
   </form>
 </template>
@@ -31,7 +35,7 @@ export default {
       await signup(email.value, password.value, displayName.value);
     };
 
-    return { displayName, email, password, handleSubmit };
+    return { displayName, email, password, handleSubmit, error };
   },
 };
 </script>
