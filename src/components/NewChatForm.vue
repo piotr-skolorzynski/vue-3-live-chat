@@ -28,8 +28,6 @@ export default {
         createdAt: timestamp(),
       };
 
-      console.log('stworzony message: ', chat);
-
       await addDoc(chat);
 
       if (!error.value) {
