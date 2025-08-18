@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { projectFirestore } from "@/firebase/config";
 
 const getCollection = (collection) => {
@@ -7,7 +7,7 @@ const getCollection = (collection) => {
 
     let collectionRef = projectFirestore.collection(collection).orderBy('createdAt');
 
-    collectionRef.onSnapshot((snaphot) => {
+    const unsub = collectionRef.onSnapshot((snaphot) => {
         let results = [];
         snaphot.docs.forEach(doc => {
             //prevent from adding data without already created timestamp
@@ -22,6 +22,10 @@ const getCollection = (collection) => {
         console.log(error.message);
         documents.value = null;
         error.value = 'Could not fetch data';
+    });
+
+    watchEffect((onInvalidate) => {
+        onInvalidate(() => unsub());
     });
 
     return { documents, error };
